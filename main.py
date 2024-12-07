@@ -1,10 +1,1 @@
-
-zsczsczsc
-sdsdcscc
-
-xazscsssa
-
-
-bk
-c
-
+............ out ..........
