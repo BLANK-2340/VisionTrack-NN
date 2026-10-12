@@ -13,6 +13,7 @@ vision performance.
 python -m pip install -r requirements-baseline.txt
 python -m unittest discover -s tests -v
 python -m vision_baseline.demo
+python -m vision_baseline.evaluate --output evaluation.json
 ```
 
 The model is `3x3 convolution -> ReLU -> global average pooling -> linear
@@ -74,9 +75,19 @@ checkpoints and no external dataset. SHA-256 detects accidental corruption but i
 not an authenticity signature. This is an educational CPU baseline, not a
 benchmark or paper reproduction.
 
+## Confidence evaluation
+
+`vision_baseline.evaluate` fits scalar temperature scaling on a separate
+calibration split and reports NLL, multiclass Brier score, 10-bin ECE,
+reliability-bin details, and selective risk/coverage on a held-out split. Its
+controlled Gaussian corruption makes the otherwise perfectly separable generated
+task nontrivial. See `docs/CALIBRATION_EVALUATION.md` for the exact protocol,
+recorded results, limitations, and artifact schema.
+
 Next vision milestone: add a controlled baseline using a small appropriately
 licensed public dataset and report measured CPU runtime and accuracy with explicit
-dataset attribution. Portfolio rotation: implement CPU-oracle boundary tests and
-a tiled CUDA matrix-multiplication benchmark; GPU results remain pending until
-actual GPU execution.
+dataset attribution. Portfolio rotation: add robust CPU benchmark output and
+metadata export across the completed CUDA kernels; GPU results remain pending
+until actual GPU execution.
+
 

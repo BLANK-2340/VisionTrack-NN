@@ -97,7 +97,21 @@ class TinyConvNet:
         return history
 
     def predict(self, images: np.ndarray) -> np.ndarray:
-        return self._forward(images)[0].argmax(axis=1)
+        return self.predict_logits(images).argmax(axis=1)
+
+    def predict_logits(self, images: np.ndarray) -> np.ndarray:
+        """Return unnormalized class scores for evaluation and calibration."""
+        return self._forward(images)[0]
+
+    def predict_proba(self, images: np.ndarray, temperature: float = 1.0) -> np.ndarray:
+        """Return stable softmax probabilities at a positive temperature."""
+        if not np.isfinite(temperature) or temperature <= 0.0:
+            raise ValueError("temperature must be finite and positive")
+        logits = self.predict_logits(images) / temperature
+        shifted = logits - logits.max(axis=1, keepdims=True)
+        probabilities = np.exp(shifted)
+        return probabilities / probabilities.sum(axis=1, keepdims=True)
 
     def accuracy(self, images: np.ndarray, labels: np.ndarray) -> float:
         return float(np.mean(self.predict(images) == labels))
+

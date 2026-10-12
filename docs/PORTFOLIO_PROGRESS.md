@@ -36,3 +36,30 @@ and a bounds-safe tiled CUDA kernel/benchmark. Keep NVCC, compute-sanitizer and 
 performance validation explicitly pending until actual GPU access is available.
 After that, add a small attributed public-data baseline to this vision project.
 
+## October 12, 2026 (Asia/Kolkata)
+
+### Completed
+
+- Added stable probability prediction, deterministic scalar temperature fitting,
+  NLL, multiclass Brier score, equal-width ECE reliability bins, and selective
+  risk/coverage evaluation.
+- Added independent calibration/test corruptions and a canonical JSON artifact
+  containing the full reproducibility protocol and seeds.
+- Added six evaluation tests, invalid-input coverage, two-run artifact comparison
+  in CI, and a measured-results document.
+- Preserved the original `main.py` and all pre-delegation files.
+
+### Actual local verification
+
+- Python 3.12.14 and NumPy 2.3.5 passed all 16 tests and bytecode compilation.
+- Two CLI runs produced identical JSON; calibrated corrupted-test NLL was
+  `0.057906`, Brier score `0.035628`, ECE `0.031575`, and accuracy `0.977778`.
+- These are controlled synthetic-corruption results, not real-world performance.
+
+### Next concrete milestone
+
+Add reproducible CPU benchmark JSON and cross-kernel metadata to
+`cuda-kernel-lab`, while keeping GPU measurements explicitly pending until a
+real CUDA runtime is available.
+
+

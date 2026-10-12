@@ -50,6 +50,8 @@ class BaselineTests(unittest.TestCase):
         model = TinyConvNet(seed=1)
         with self.assertRaises(ValueError):
             model.predict(np.zeros((1, 2, 2)))
+        with self.assertRaises(ValueError):
+            model.predict_proba(np.zeros((1, 8, 8)), temperature=0.0)
         images, _ = make_dataset(1, seed=2)
         with self.assertRaises(ValueError):
             model.loss_and_gradients(images, np.array([0, 1, 2, 3]))
@@ -57,3 +59,4 @@ class BaselineTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
