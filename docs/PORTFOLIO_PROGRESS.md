@@ -62,4 +62,30 @@ Add reproducible CPU benchmark JSON and cross-kernel metadata to
 `cuda-kernel-lab`, while keeping GPU measurements explicitly pending until a
 real CUDA runtime is available.
 
+## October 13, 2026 (Asia/Kolkata)
+
+### Completed
+
+- Added a deterministic image-folder evaluator for saved TinyConvNet checkpoints
+  and strict class-directory PGM datasets.
+- Added checkpoint identity, sorted relative sample paths, a true-row/predicted-
+  column confusion matrix, accuracy, and macro/per-class precision, recall and F1
+  to a canonical JSON artifact.
+- Rejects ambiguous labels, missing or unknown classes, symlinks, nested content,
+  non-PGM files, empty classes and invalid inference temperatures.
+- Added four focused tests covering exact metrics, deterministic CLI bytes,
+  portable paths and invalid layouts, while preserving the original `main.py`.
+
+### Verification scope
+
+- Full unit-test, bytecode and CLI checks are run
+  before publishing; the resulting exact counts belong in the commit report.
+- No external dataset accuracy, GPU result or production robustness is claimed.
+
+### Next concrete milestone
+
+Add a small attributed public-data adapter with an explicit preprocessing and
+split manifest, while keeping the synthetic and user-folder results clearly
+separated.
+
 

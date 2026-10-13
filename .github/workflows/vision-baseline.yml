@@ -15,4 +15,5 @@ jobs:
       - run: python -m vision_baseline.evaluate --output /tmp/evaluation-a.json
       - run: python -m vision_baseline.evaluate --output /tmp/evaluation-b.json
       - run: cmp /tmp/evaluation-a.json /tmp/evaluation-b.json
+      - run: python -m compileall -q vision_baseline tests
 
