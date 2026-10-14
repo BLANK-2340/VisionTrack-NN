@@ -1,5 +1,6 @@
 {
   "dataset": {
+    "manifest_sha256": "4b36c62d1043ad2f6ef48953eea5e82aba1f048b1788c20fab7e5a4dc83a5ffc",
     "name": "Fashion-MNIST",
     "official_source_verified": true,
     "split_sizes": {

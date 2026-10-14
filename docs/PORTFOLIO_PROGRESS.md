@@ -137,4 +137,20 @@ Add a spatially preserving model variant and compare it using the same manifest
 and evaluation protocol. Keep the existing low-capacity result as the honest
 control rather than replacing it.
 
+### Spatial comparison completed
+
+- Added a deterministic `conv3x3 -> ReLU -> 4x4 grid average pool -> linear`
+  variant with explicit backpropagation and central finite-difference checks.
+- On the identical official 1,000/500/500 manifest, test accuracy increased
+  from `0.288000` to `0.720000` and macro F1 from `0.272427` to `0.721262`.
+- Two complete real-data runs produced byte-identical JSON reports. The recorded
+  calibration result includes the slight ECE regression after temperature fitting.
+- Added a machine-readable comparison, exact manifest identity, confusion matrix,
+  reproducibility notes and limitations. The original control remains unchanged.
+
+### Next concrete milestone
+
+Rotate to another project track. When returning to vision, add multi-seed
+evaluation and a parameter-matched pooling ablation before expanding model depth.
+
 

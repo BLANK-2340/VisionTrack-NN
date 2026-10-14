@@ -1,0 +1,51 @@
+{
+  "dataset": {
+    "manifest_sha256": "4b36c62d1043ad2f6ef48953eea5e82aba1f048b1788c20fab7e5a4dc83a5ffc",
+    "split_sizes": {
+      "test": 500,
+      "train": 1000,
+      "validation": 500
+    }
+  },
+  "global_average_pool_control": {
+    "accuracy": 0.288,
+    "macro_f1": 0.2724266878104474,
+    "parameter_count": 330
+  },
+  "schema_version": 1,
+  "spatial_grid_model": {
+    "accuracy": 0.72,
+    "calibrated_ece_10_bins": 0.031308820240195157,
+    "calibrated_nll": 0.7882636700152649,
+    "confusion_matrix_true_rows": [
+      [37, 1, 0, 6, 0, 0, 4, 0, 2, 0],
+      [0, 44, 1, 4, 0, 0, 1, 0, 0, 0],
+      [0, 1, 21, 0, 4, 0, 24, 0, 0, 0],
+      [1, 3, 1, 37, 1, 0, 7, 0, 0, 0],
+      [0, 0, 7, 8, 24, 1, 10, 0, 0, 0],
+      [0, 0, 0, 0, 0, 39, 0, 7, 0, 4],
+      [6, 1, 4, 0, 5, 0, 32, 0, 2, 0],
+      [0, 0, 0, 0, 0, 6, 0, 38, 0, 6],
+      [0, 1, 0, 1, 0, 0, 2, 1, 45, 0],
+      [0, 0, 0, 0, 0, 6, 0, 1, 0, 43]
+    ],
+    "final_training_loss": 0.6374046037160102,
+    "macro_f1": 0.7212624044943201,
+    "parameter_count": 1370,
+    "protocol": {
+      "batch_size": 100,
+      "channels": 8,
+      "epochs": 100,
+      "grid_size": 4,
+      "learning_rate": 0.15,
+      "seed": 20261014
+    },
+    "temperature": 1.0147399972063034,
+    "uncalibrated_ece_10_bins": 0.021998035787583123,
+    "uncalibrated_nll": 0.7887568471046797
+  },
+  "spatial_minus_control": {
+    "accuracy_percentage_points": 43.2,
+    "macro_f1": 0.4488357166838727
+  }
+}
