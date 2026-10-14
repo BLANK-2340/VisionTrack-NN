@@ -119,4 +119,22 @@ Run a controlled Fashion-MNIST subset experiment with a fixed training protocol,
 then report accuracy, confusion and calibration artifacts separately from the
 synthetic orientation benchmark.
 
+### Controlled experiment completed
+
+- Added a deterministic train/validation/test runner, optional checkpoint output,
+  canonical report, confusion matrix and per-class/macro metrics.
+- Ran one fixed 330-parameter TinyConvNet protocol on official, balanced
+  1,000/500/500 subsets. Test accuracy was `0.288000`, macro F1 `0.272427`,
+  calibrated NLL `1.858109` and 10-bin ECE `0.057498`.
+- Added four focused tests covering matrix orientation, split accounting,
+  deterministic report/checkpoint bytes and invalid hyperparameters.
+- Recorded the weak result explicitly: global average pooling loses spatial
+  layout, so this is an educational baseline rather than a competitive claim.
+
+### Next concrete milestone
+
+Add a spatially preserving model variant and compare it using the same manifest
+and evaluation protocol. Keep the existing low-capacity result as the honest
+control rather than replacing it.
+
 
