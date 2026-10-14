@@ -88,4 +88,35 @@ Add a small attributed public-data adapter with an explicit preprocessing and
 split manifest, while keeping the synthetic and user-folder results clearly
 separated.
 
+## October 14, 2026 (Asia/Kolkata)
+
+### Completed
+
+- Added an original dependency-light Fashion-MNIST IDX/gzip adapter with strict
+  magic, shape, count, label, payload and resource-limit validation.
+- Added upstream MD5 enforcement, recorded SHA-256 source identities and
+  re-verification when materializing a split.
+- Added deterministic, class-balanced train/validation/test manifests with exact
+  sorted indices and explicit preprocessing; validation never consumes the
+  official test source.
+- Added five synthetic-fixture tests and attribution, license, usage and
+  limitation documentation without redistributing dataset files.
+- Preserved the repository's original `main.py` and prior task-owned features.
+
+### Actual verification
+
+- All 25 tests passed with warnings promoted to errors; bytecode compilation
+  also passed.
+- The upstream repository's four official files passed every published MD5
+  check and produced a canonical 105,526-byte manifest.
+- Materialized train/validation/test arrays had shapes `(5000, 28, 28)`,
+  `(1000, 28, 28)` and `(1000, 28, 28)`, with all ten labels represented.
+- No Fashion-MNIST model accuracy is claimed by this data-adapter milestone.
+
+### Next concrete milestone
+
+Run a controlled Fashion-MNIST subset experiment with a fixed training protocol,
+then report accuracy, confusion and calibration artifacts separately from the
+synthetic orientation benchmark.
+
 
