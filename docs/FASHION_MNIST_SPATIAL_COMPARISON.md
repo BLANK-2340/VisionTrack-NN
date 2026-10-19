@@ -41,7 +41,9 @@ That ECE regression is retained in the result rather than selectively omitted.
   Fashion-MNIST claim.
 - The comparison isolates the pooling representation, but channel count and
   resulting parameter count differ. It is not a parameter-matched ablation.
-- Only one seed is measured; run-to-run variance is not estimated.
+- This original comparison measures one seed. The separate
+  [multi-seed follow-up](FASHION_MNIST_MULTISEED.md) estimates initialization and
+  shuffle variation on the same fixed split without replacing this result.
 - No augmentation, hyperparameter sweep, test tuning or controlled timing was used.
 - The committed comparison artifact contains the complete true-row/predicted-
   column confusion matrix. Dataset files are not redistributed.

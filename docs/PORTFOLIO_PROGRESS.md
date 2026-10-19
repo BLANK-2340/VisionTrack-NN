@@ -1,5 +1,43 @@
 # Portfolio continuity
 
+## October 19, 2026 (Asia/Kolkata)
+
+Started from `65c8b6f62415343cbdd564060270dd84f5692b83`, with no open PRs
+and no commits yet in today's Kolkata date window across the six accessible
+allowlisted repositories. Preserved the original `main.py` and all previous work.
+
+### Completed
+
+- Added a fixed-protocol multi-seed runner around the established spatial CNN,
+  retaining every seed's complete report and validation-only calibration.
+- Added min/max/mean/sample-standard-deviation summaries for accuracy, F1, NLL
+  and ECE, plus paired calibration changes and explicit regression counts.
+- Added distinct-seed, identical-protocol and manifest-mutation guards; synthetic
+  source manifests remain explicitly distinguished from official files.
+- Added five tests for independent known statistics, rejected plans and mismatched
+  runs, manifest changes, and repeated real fixture training/CLI artifact bytes.
+
+### Verification
+
+- Python 3.12.14 / NumPy 2.3.5 passed all 38 tests with warnings as errors and
+  bytecode compilation. No full-data or GPU result is implied by these tests.
+- Official files passed all four MD5 checks; the rebuilt 1,000/500/500 manifest
+  exactly matched the earlier comparison's SHA-256.
+- Seeds 20261014/15/16 yielded 72.0%, 72.6% and 73.4% test accuracy; mean
+  72.67%, sample standard deviation 0.70 percentage points. Mean macro F1 was
+  0.723750. Full per-seed reports and aggregation are retained in the result JSON.
+- Temperature calibration increased test NLL in two runs and ECE in two runs;
+  these regressions are explicitly preserved, not filtered out.
+- Two independent full official-data suites produced byte-identical JSON.
+  Artifact consistency checks, original train-save-infer smoke checks and
+  `git diff --check` passed. Remote CI results require separate confirmation.
+
+### Next concrete milestone
+
+Add a parameter-matched pooling comparison under the same fixed manifest and
+prespecified training/seed protocol. Keep architecture capacity differences and
+calibration regressions explicit; do not tune against test results.
+
 ## October 7, 2026 (Asia/Kolkata)
 
 Source of truth before this session: `main` at
