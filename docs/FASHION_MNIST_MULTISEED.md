@@ -5,6 +5,10 @@ without changing its model, preprocessing or manifest. It varies initialization
 and minibatch-shuffle seeds, not dataset membership. It is not a parameter-matched
 pooling ablation, a full-dataset benchmark, or an estimate of split uncertainty.
 
+The [equal-budget follow-up](FASHION_MNIST_POOLING_BUDGET.md) compares grid and
+global pooling models at matched total parameter counts. Convolution width and
+capacity allocation differ, so it is explicitly not a pooling-only intervention.
+
 ## Reproduce
 
 Obtain the four official files following [the adapter guide](FASHION_MNIST_ADAPTER.md).

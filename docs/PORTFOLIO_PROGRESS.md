@@ -1,5 +1,48 @@
 # Portfolio continuity
 
+## October 19, 2026 — matched-budget continuation (Asia/Kolkata)
+
+Started from main `1d8fbea8ac6a192ea3beadce397993d6b76f32d8`. One
+portfolio commit was already present in today's Kolkata window; no open PRs
+were present. The original `main.py`, prior implementations and results remain
+unchanged.
+
+### Completed
+
+- Added an exactly matched-total-parameter comparison using the established CNN:
+  8 channels with 4×4 grid pooling versus 68 channels with global pooling, both
+  1,370 active trainable parameters.
+- Added architecture-budget derivation, paired seed differences, complete per-arm
+  reports and guards against mismatched protocols, manifests, seeds and budgets.
+- Added four tests for actual parameter counts, independent global-pooling
+  equivalence in forward/gradient calculations, known paired statistics, rejected
+  comparisons and two-run fixture CLI byte reproducibility.
+- Explicitly documented width/capacity allocation and compute confounders: this
+  is not a pure pooling-only causal ablation.
+
+### Verification
+
+- All 42 tests passed under Python 3.12.14 / NumPy 2.3.5 with warnings treated as
+  errors. Bytecode compilation and diff checks passed.
+- Official data passed upstream MD5 checks and rebuilt the exact previous
+  1,000/500/500 manifest. All six prescribed model/seed runs completed.
+- At 1,370 parameters per model, mean accuracy was 72.67% (grid) versus 36.00%
+  (global); mean paired difference was 36.67 percentage points with sample
+  standard deviation 1.29 points. This is a matched-budget comparison, not a
+  pooling-only causal claim or independently held-out benchmark result.
+- The grid arm exactly reproduced the earlier committed multi-seed report.
+  Final-source reconstruction, all six budgets and all confusion totals passed.
+  All per-arm reports and calibration regressions are preserved in the result.
+- Original training/checkpoint/inference smoke checks passed. The full official
+  comparison was run once; only fixture comparisons were independently repeated.
+  GitHub Actions results require separate confirmation.
+
+### Next concrete milestone
+
+Rotate to `cuda-kernel-lab` for robustness/reproducibility checks around the
+existing CPU benchmark report and available compiler paths. Keep actual GPU,
+NVCC and compute-sanitizer measurements pending if the required runtime is absent.
+
 ## October 19, 2026 (Asia/Kolkata)
 
 Started from `65c8b6f62415343cbdd564060270dd84f5692b83`, with no open PRs
