@@ -17,9 +17,10 @@ python -m pip install -r requirements-baseline.txt
 ```
 
 The verifier exports committed `HEAD` with `git archive`, then runs the full
-test suite, bytecode compilation, checkpointed training, PGM inference and two
-byte-compared calibrated-evaluation runs. It therefore detects missing tracked
-files that an in-place working-tree test can overlook.
+test suite, result-artifact consistency validation, bytecode compilation,
+checkpointed training, PGM inference and two byte-compared calibrated-evaluation
+runs. It therefore detects missing tracked files that an in-place working-tree
+test can overlook.
 
 ## Runnable targets
 
@@ -29,6 +30,7 @@ files that an in-place working-tree test can overlook.
 | Save and infer | `python -m vision_baseline.demo --checkpoint /tmp/orientation.vtnn` then `python -m vision_baseline.infer /tmp/orientation.vtnn examples/vertical_12x12.pgm` | Deterministic validated checkpoint and P2/P5 input path |
 | Calibration report | `python -m vision_baseline.evaluate --output /tmp/evaluation.json` | Held-out synthetic corruption, calibration and selective risk |
 | Full checks | `python -W error -m unittest discover -s tests -v` | Model gradients, I/O, data manifests, reports and failure paths |
+| Result validation | `python -W error -m vision_baseline.validate_results results` | Schemas, manifest identity, confusion totals, aggregates and cross-file provenance |
 | Fashion-MNIST subset experiments | See [adapter](FASHION_MNIST_ADAPTER.md), [multi-seed](FASHION_MNIST_MULTISEED.md) and [equal-budget](FASHION_MNIST_POOLING_BUDGET.md) guides | Requires separately downloaded official files |
 
 ## Recorded results
@@ -75,5 +77,5 @@ compute. It is not a pooling-only causal ablation.
 
 The next robustness milestone is to validate a full official Fashion-MNIST run
 under a separately fixed protocol, if compute permits, while retaining subset
-results and avoiding test-set tuning. A smaller independent improvement is to
-add artifact-schema validation to the clean-checkout verifier.
+results and avoiding test-set tuning. Before that larger run, add a portable
+environment fingerprint so future reports record Python, NumPy and BLAS details.

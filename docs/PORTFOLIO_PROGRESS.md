@@ -3,6 +3,39 @@
 For the concise runnable-project index, measured-result boundaries and current
 limitations, see [SHOWCASE.md](SHOWCASE.md).
 
+## October 23, 2026 — committed-result validation (Asia/Kolkata)
+
+Started from `31be8d192313c4bb9968401e7cbf2126b1e69fa8`, the first of
+today's three planned portfolio commits, with no open pull requests. The original
+`main.py`, model implementations and recorded result JSON remain unchanged.
+
+### Completed
+
+- Added a dependency-free validator for all four committed Fashion-MNIST result
+  artifacts, with bounded strict JSON parsing and duplicate/non-finite rejection.
+- Recomputes confusion totals, accuracy, aggregate sample statistics, calibration
+  regression counts, paired pooling deltas and exact parameter budgets.
+- Proves cross-file provenance: the control matches its source report, the first
+  spatial run matches the comparison, and the grid arm exactly embeds the prior
+  multi-seed artifact.
+- Added CLI, clean-archive and CI integration plus mutation tests for manifest,
+  aggregate, confusion, paired-delta and duplicate-key corruption.
+
+### Verification
+
+- Python 3.12 / NumPy 2.3.5 passed all 46 tests with warnings promoted to
+  errors, including four new mutation-focused artifact tests.
+- The validator accepted all four committed artifacts, three spatial runs and
+  six pooling-comparison runs under the shared recorded manifest SHA-256.
+- Bytecode compilation and diff checks passed. Final committed-tree archive
+  verification is run immediately before publication.
+
+### Next concrete milestone
+
+Record a portable Python/NumPy/BLAS environment fingerprint for future reports.
+Keep a full official Fashion-MNIST run pending until a fixed protocol and enough
+CPU time are available; do not tune against the repeatedly used subset.
+
 ## October 23, 2026 — showcase verification (Asia/Kolkata)
 
 Started from `344498caba8ca377fa90d6b2fe3b367316a84275` with no open

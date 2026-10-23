@@ -10,6 +10,7 @@ cd "$archive_root"
 
 python -W error -m unittest discover -s tests -v
 python -m compileall -q vision_baseline tests
+python -W error -m vision_baseline.validate_results results
 
 python -W error -m vision_baseline.demo --checkpoint "$archive_root/orientation.vtnn" \
   > "$archive_root/demo.txt"
