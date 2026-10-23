@@ -1,5 +1,40 @@
 # Portfolio continuity
 
+For the concise runnable-project index, measured-result boundaries and current
+limitations, see [SHOWCASE.md](SHOWCASE.md).
+
+## October 23, 2026 — showcase verification (Asia/Kolkata)
+
+Started from `344498caba8ca377fa90d6b2fe3b367316a84275` with no open
+pull requests and no commits yet today across the accessible allowlisted
+repositories. The original `main.py`, prior models, reports and result artifacts
+remain unchanged.
+
+### Completed
+
+- Added a committed-tree verifier that exports `HEAD` before running the complete
+  suite, compilation, checkpointed demo, PGM inference and byte-repeatable
+  calibrated evaluation.
+- Added a concise showcase index of setup commands, runnable targets, evidence,
+  recorded results and explicit interpretation limits.
+- Clearly separates the synthetic regression evidence and measured official
+  1,000/500/500 Fashion-MNIST subset results from a full-dataset benchmark claim.
+
+### Verification
+
+- Python 3.12 / NumPy 2.3.5 passed all 42 tests with warnings promoted to
+  errors, plus bytecode compilation.
+- The checkpointed synthetic demo and included PGM inference path passed; the
+  image was classified as class 0 (`vertical`).
+- Two calibrated-evaluation runs produced byte-identical JSON. Final
+  committed-tree archive verification is run immediately before publication.
+
+### Next concrete milestone
+
+Add schema and cross-artifact consistency validation for committed result JSON,
+then consider a separately fixed full official Fashion-MNIST protocol only if
+available CPU time permits. Do not tune against the repeatedly used test subset.
+
 ## October 19, 2026 — matched-budget continuation (Asia/Kolkata)
 
 Started from main `1d8fbea8ac6a192ea3beadce397993d6b76f32d8`. One
