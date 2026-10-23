@@ -12,6 +12,12 @@ python -W error -m unittest discover -s tests -v
 python -m compileall -q vision_baseline tests
 python -W error -m vision_baseline.validate_results results
 
+python -W error -m vision_baseline.environment_report \
+  --output "$archive_root/environment-a.json"
+python -W error -m vision_baseline.environment_report \
+  --output "$archive_root/environment-b.json"
+cmp "$archive_root/environment-a.json" "$archive_root/environment-b.json"
+
 python -W error -m vision_baseline.demo --checkpoint "$archive_root/orientation.vtnn" \
   > "$archive_root/demo.txt"
 python -W error -m vision_baseline.infer \

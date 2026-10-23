@@ -3,6 +3,35 @@
 For the concise runnable-project index, measured-result boundaries and current
 limitations, see [SHOWCASE.md](SHOWCASE.md).
 
+## October 23, 2026 — portable environment fingerprint (Asia/Kolkata)
+
+Started from `a3fec62f486b9455d386848bc21a9117ab590286`, the second of
+today's three planned portfolio commits, with no open pull requests. The original
+`main.py`, model implementations and recorded result JSON remain unchanged.
+
+### Completed
+
+- Added a canonical JSON environment command covering Python, platform, NumPy,
+  BLAS/LAPACK build identity, build compilers and NumPy SIMD capabilities.
+- Explicitly omits timestamps, host/user identity, executable/build paths and
+  arbitrary command strings so reports are portable and safe to retain.
+- Supports NumPy 2 structured configuration and the older NumPy 1 `get_info`
+  interface; clean-archive and CI checks compare two independently written files.
+
+### Verification
+
+- Python 3.12 / NumPy 2.3.5 passed all 49 warning-strict tests, including
+  redaction and byte-repeatability checks.
+- The environment command identified the current NumPy build as SciPy OpenBLAS
+  0.3.30 without retaining its private build paths. Final committed-tree archive
+  verification is run immediately before publication.
+
+### Next concrete milestone
+
+Rotate to `cuda-kernel-lab` for clean-checkout showcase verification around its
+existing benchmark artifacts. Keep CUDA execution, NVCC and GPU performance
+measurements pending until a real CUDA runtime is available.
+
 ## October 23, 2026 — committed-result validation (Asia/Kolkata)
 
 Started from `31be8d192313c4bb9968401e7cbf2126b1e69fa8`, the first of
