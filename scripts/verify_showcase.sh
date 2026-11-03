@@ -26,6 +26,16 @@ python -W error -m vision_baseline.infer \
 grep -Fx \
   "class_index=0 label=vertical height=12 width=12" \
   "$archive_root/inference.txt"
+python -W error -m vision_baseline.infer \
+  "$archive_root/orientation.vtnn" examples/vertical_12x12.pgm \
+  --top-k 3 --temperature 0.75 > "$archive_root/ranked-a.txt"
+python -W error -m vision_baseline.infer \
+  "$archive_root/orientation.vtnn" examples/vertical_12x12.pgm \
+  --top-k 3 --temperature 0.75 > "$archive_root/ranked-b.txt"
+cmp "$archive_root/ranked-a.txt" "$archive_root/ranked-b.txt"
+grep -Fx \
+  "confidence_margin=0.998330229969 height=12 width=12 temperature=0.75" \
+  "$archive_root/ranked-a.txt"
 
 python -W error -m vision_baseline.evaluate \
   --output "$archive_root/evaluation-a.json"

@@ -28,6 +28,7 @@ an in-place working-tree test can overlook.
 | --- | --- | --- |
 | Synthetic training | `python -m vision_baseline.demo` | Original generated orientation task; no download |
 | Save and infer | `python -m vision_baseline.demo --checkpoint /tmp/orientation.vtnn` then `python -m vision_baseline.infer /tmp/orientation.vtnn examples/vertical_12x12.pgm` | Deterministic validated checkpoint and P2/P5 input path |
+| Ranked inference | Add `--top-k 3 --temperature 1.0` to the inference command | Stable top-k order, probabilities and top-two confidence margin; [API details](INFERENCE_RANKING.md) |
 | Calibration report | `python -m vision_baseline.evaluate --output /tmp/evaluation.json` | Held-out synthetic corruption, calibration and selective risk |
 | Full checks | `python -W error -m unittest discover -s tests -v` | Model gradients, I/O, data manifests, reports and failure paths |
 | Result validation | `python -W error -m vision_baseline.validate_results results` | Schemas, manifest identity, confusion totals, aggregates and cross-file provenance |

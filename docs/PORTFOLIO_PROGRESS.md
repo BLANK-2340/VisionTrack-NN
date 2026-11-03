@@ -1,5 +1,35 @@
 # Portfolio continuity
 
+## November 3, 2026 — deterministic ranked inference (Asia/Kolkata)
+
+Started from public `main` at
+`12674754043ee6e7b097a549078736b5f913be01`, with no open pull requests and one
+earlier portfolio commit today in another authorized repository. The original
+`main.py`, model implementations and recorded result artifacts remain unchanged.
+
+### Completed
+
+- Added validated top-k inference for probability matrices and `TinyConvNet`
+  batches, with stable descending probability order and ascending class-index
+  tie breaks.
+- Added a top-two confidence margin independent of requested `k`, strict input
+  guards and optional ranked CLI output while preserving the default output.
+- Added known-order, exact-tie, boundary, malformed-input and model-integration
+  tests plus focused API and interpretation documentation.
+
+### Validation and limitations
+
+- The full warning-strict suite, clean committed-archive verification, default
+  inference compatibility and ranked CLI behavior are required before release.
+- Confidence and margins are descriptive model outputs, not correctness
+  guarantees; thresholds and temperature require validation-only selection.
+
+### Next concrete milestone
+
+Add an optional validation-fixed abstention policy with coverage and selective
+risk reporting, reusing the established calibration report without changing
+the existing default inference path.
+
 For the concise runnable-project index, measured-result boundaries and current
 limitations, see [SHOWCASE.md](SHOWCASE.md).
 
