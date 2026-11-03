@@ -9,6 +9,7 @@ from pathlib import Path
 
 import numpy as np
 
+from .abstention import abstention_metrics, fit_abstention_policy, policy_record
 from .model import TinyConvNet, make_dataset
 
 
@@ -162,6 +163,8 @@ def evaluate_model(model: TinyConvNet, calibration_images: np.ndarray,
                    test_labels: np.ndarray, bins: int = 10) -> dict[str, object]:
     calibration_logits = model.predict_logits(calibration_images)
     temperature = fit_temperature(calibration_logits, calibration_labels)
+    calibration_probabilities = probabilities_from_logits(calibration_logits, temperature)
+    policy = fit_abstention_policy(calibration_probabilities, calibration_labels)
     test_logits = model.predict_logits(test_images)
     uncalibrated = probabilities_from_logits(test_logits)
     calibrated = probabilities_from_logits(test_logits, temperature)
@@ -172,8 +175,10 @@ def evaluate_model(model: TinyConvNet, calibration_images: np.ndarray,
             "samples": int(len(calibration_labels)),
             "temperature": temperature,
         },
-        "schema_version": 1,
+        "abstention_policy": policy_record(policy),
+        "schema_version": 2,
         "test": {
+            "abstention": abstention_metrics(calibrated, test_labels, policy),
             "calibrated": calibration_metrics(calibrated, test_labels, bins),
             "samples": int(len(test_labels)),
             "selective": selective_metrics(calibrated, test_labels),

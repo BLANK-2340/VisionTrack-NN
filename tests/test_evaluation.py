@@ -46,9 +46,11 @@ class EvaluationTests(unittest.TestCase):
         second = evaluate_model(model, calibration_images, calibration_labels,
                                 test_images, test_labels, bins=4)
         self.assertEqual(json.dumps(first, sort_keys=True), json.dumps(second, sort_keys=True))
-        self.assertEqual(first["schema_version"], 1)
+        self.assertEqual(first["schema_version"], 2)
         self.assertEqual(first["test"]["samples"], 12)
         self.assertEqual(first["test"]["selective"][-1]["retained"], 12)
+        self.assertEqual(first["abstention_policy"]["validation_samples"], 9)
+        self.assertEqual(first["test"]["abstention"]["samples"], 12)
 
     def test_corruption_is_bounded_and_deterministic(self):
         images, _ = make_dataset(2, seed=7, size=8)

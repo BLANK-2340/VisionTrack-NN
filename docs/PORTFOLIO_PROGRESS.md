@@ -1,5 +1,36 @@
 # Portfolio continuity
 
+## November 3, 2026 — validation-fixed abstention (Asia/Kolkata)
+
+Started from public `main` at
+`a42ec0bb0213adbc4d8a32fd8904ddd44917c27c`, with no open pull requests and two
+earlier substantive portfolio commits today. The default inference path,
+original `main.py`, model implementations and committed result artifacts remain
+unchanged.
+
+### Completed
+
+- Added a frozen top-two-margin policy fitted only on validation probabilities,
+  with deterministic boundary handling that retains all exact threshold ties.
+- Added separate policy application and evaluation APIs reporting coverage,
+  retained counts and selective risk without test-set refitting.
+- Integrated the policy and its validation evidence into the deterministic
+  calibration report under schema version 2, with focused separation, tie,
+  empty-acceptance, serialization and invalid-input tests.
+
+### Validation and limitations
+
+- The warning-strict suite and clean committed-archive verification are required
+  before release.
+- Abstention does not guarantee correctness. Coverage and selective risk may
+  shift under distribution change; the target coverage must be chosen before
+  final-test inspection.
+
+### Next concrete milestone
+
+Add a small policy-aware folder inference command that records accepted and
+abstained files while keeping the existing default single-image output stable.
+
 ## November 3, 2026 — deterministic ranked inference (Asia/Kolkata)
 
 Started from public `main` at
