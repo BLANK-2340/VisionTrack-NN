@@ -1,5 +1,36 @@
 # Portfolio continuity
 
+## November 4, 2026 — labeled-folder policy audit (Asia/Kolkata)
+
+Started from public `main` at
+`ee537da8b0b4dfaa22e45d9d0d6ac307ca4d8f4b`, with no open pull requests and one
+earlier substantive portfolio commit today. Existing folder-evaluation output,
+checkpoints, recorded results and default inference remain unchanged.
+
+### Completed
+
+- Added a separate audit command for applying the frozen abstention policy to
+  strict labeled class-directory datasets without refitting.
+- Reports aggregate and per-class coverage, accepted errors and selective risk,
+  retaining deterministic prediction-level evidence.
+- Keeps zero-acceptance classes explicit with null risk rather than omitting them
+  or assigning a misleading zero.
+- Added exact known-result, zero-acceptance, invalid-policy and byte-repeatability
+  tests plus clean-archive showcase integration.
+
+### Validation and limitations
+
+- The warning-strict suite and clean committed-archive verification are required
+  before release.
+- Per-class estimates are descriptive and can be unstable for small supports;
+  the audit dataset must not be used to refit the threshold.
+
+### Next concrete milestone
+
+Rotate to `cuda-kernel-lab` and verify its committed benchmark evidence against
+the current clean-checkout workflow. Keep CUDA/NVCC/GPU measurements pending
+unless real compatible hardware is available.
+
 ## November 4, 2026 — policy-aware folder inference (Asia/Kolkata)
 
 Started from public `main` at

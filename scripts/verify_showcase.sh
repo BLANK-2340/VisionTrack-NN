@@ -53,4 +53,17 @@ python -W error -m vision_baseline.infer_folder \
   "$archive_root/evaluation-a.json" --output "$archive_root/folder-b.json"
 cmp "$archive_root/folder-a.json" "$archive_root/folder-b.json"
 
+mkdir -p "$archive_root/labeled-images/vertical" \
+  "$archive_root/labeled-images/horizontal" "$archive_root/labeled-images/diagonal"
+cp examples/vertical_12x12.pgm "$archive_root/labeled-images/vertical/sample.pgm"
+cp examples/vertical_12x12.pgm "$archive_root/labeled-images/horizontal/sample.pgm"
+cp examples/vertical_12x12.pgm "$archive_root/labeled-images/diagonal/sample.pgm"
+python -W error -m vision_baseline.audit_policy \
+  "$archive_root/orientation.vtnn" "$archive_root/labeled-images" \
+  "$archive_root/evaluation-a.json" --output "$archive_root/audit-a.json"
+python -W error -m vision_baseline.audit_policy \
+  "$archive_root/orientation.vtnn" "$archive_root/labeled-images" \
+  "$archive_root/evaluation-a.json" --output "$archive_root/audit-b.json"
+cmp "$archive_root/audit-a.json" "$archive_root/audit-b.json"
+
 echo "showcase verification passed for $(git -C "$repo_root" rev-parse HEAD)"
