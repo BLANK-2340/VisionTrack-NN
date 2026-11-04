@@ -43,4 +43,14 @@ python -W error -m vision_baseline.evaluate \
   --output "$archive_root/evaluation-b.json"
 cmp "$archive_root/evaluation-a.json" "$archive_root/evaluation-b.json"
 
+mkdir "$archive_root/inference-images"
+cp examples/vertical_12x12.pgm "$archive_root/inference-images/vertical.pgm"
+python -W error -m vision_baseline.infer_folder \
+  "$archive_root/orientation.vtnn" "$archive_root/inference-images" \
+  "$archive_root/evaluation-a.json" --output "$archive_root/folder-a.json"
+python -W error -m vision_baseline.infer_folder \
+  "$archive_root/orientation.vtnn" "$archive_root/inference-images" \
+  "$archive_root/evaluation-a.json" --output "$archive_root/folder-b.json"
+cmp "$archive_root/folder-a.json" "$archive_root/folder-b.json"
+
 echo "showcase verification passed for $(git -C "$repo_root" rev-parse HEAD)"

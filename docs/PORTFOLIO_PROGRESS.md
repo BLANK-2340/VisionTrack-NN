@@ -1,5 +1,37 @@
 # Portfolio continuity
 
+## November 4, 2026 — policy-aware folder inference (Asia/Kolkata)
+
+Started from public `main` at
+`bbaa28e499fb839dccc5cf1ae8049c5e923c9d07`, with no open pull requests and no
+earlier authorized portfolio commits today. Existing checkpoints, result
+artifacts and default single-image inference remain unchanged.
+
+### Completed
+
+- Added deterministic flat-folder PGM inference that consumes the policy record
+  embedded in the established calibration report and never refits on inference
+  inputs.
+- Records relative paths, top predictions, probabilities, confidence margins and
+  accepted/abstained decisions plus aggregate coverage.
+- Added strict bounded JSON policy loading with duplicate-key, non-finite,
+  schema and internal-consistency validation.
+- Added decision, ordering, wrapper-loading, malformed-input and byte-repeatable
+  CLI tests plus clean-archive showcase integration.
+
+### Validation and limitations
+
+- The warning-strict suite and clean committed-archive verification are required
+  before release.
+- Inference folders are unlabeled, so reports do not claim accuracy or selective
+  risk. Acceptance is not a correctness guarantee, and coverage may shift.
+
+### Next concrete milestone
+
+Add a deterministic labeled-folder policy audit that groups selective risk by
+class and makes zero-acceptance classes explicit without changing existing
+evaluation output.
+
 ## November 3, 2026 — validation-fixed abstention (Asia/Kolkata)
 
 Started from public `main` at

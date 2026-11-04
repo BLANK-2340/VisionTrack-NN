@@ -88,3 +88,39 @@ def fit_abstention_policy(probabilities: np.ndarray, labels: np.ndarray,
 def policy_record(policy: AbstentionPolicy) -> dict[str, float | int]:
     """Return a stable JSON-compatible policy record."""
     return dict(policy._asdict())
+
+
+def policy_from_record(record: object) -> AbstentionPolicy:
+    """Validate and restore a policy from its JSON-compatible record."""
+    expected = tuple(AbstentionPolicy._fields)
+    if not isinstance(record, dict) or tuple(sorted(record)) != tuple(sorted(expected)):
+        raise ValueError("policy record fields do not match the supported schema")
+    numeric = (int, float, np.integer, np.floating)
+    for name in expected[:4]:
+        value = record[name]
+        if isinstance(value, (bool, np.bool_)) or not isinstance(value, numeric):
+            raise ValueError(f"policy field {name} must be numeric")
+    for name in expected[4:]:
+        value = record[name]
+        if isinstance(value, (bool, np.bool_)) or not isinstance(value, (int, np.integer)):
+            raise ValueError(f"policy field {name} must be an integer")
+    policy = AbstentionPolicy(
+        min_margin=float(record["min_margin"]),
+        requested_coverage=float(record["requested_coverage"]),
+        validation_coverage=float(record["validation_coverage"]),
+        validation_risk=float(record["validation_risk"]),
+        validation_retained=int(record["validation_retained"]),
+        validation_samples=int(record["validation_samples"]),
+    )
+    if (not all(math.isfinite(value) for value in policy[:4]) or
+            not 0.0 <= policy.min_margin <= 1.0 or
+            not 0.0 < policy.requested_coverage <= 1.0 or
+            not policy.requested_coverage <= policy.validation_coverage <= 1.0 or
+            not 0.0 <= policy.validation_risk <= 1.0 or
+            policy.validation_samples < 1 or
+            not 1 <= policy.validation_retained <= policy.validation_samples or
+            not math.isclose(policy.validation_coverage,
+                             policy.validation_retained / policy.validation_samples,
+                             rel_tol=0.0, abs_tol=1.0e-12)):
+        raise ValueError("policy record contains inconsistent values")
+    return policy
