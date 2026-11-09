@@ -65,5 +65,9 @@ python -W error -m vision_baseline.audit_policy \
   "$archive_root/orientation.vtnn" "$archive_root/labeled-images" \
   "$archive_root/evaluation-a.json" --output "$archive_root/audit-b.json"
 cmp "$archive_root/audit-a.json" "$archive_root/audit-b.json"
+python -W error -m vision_baseline.validate_policy_audit \
+  "$archive_root/audit-a.json" "$archive_root/orientation.vtnn" \
+  "$archive_root/labeled-images" "$archive_root/evaluation-a.json" \
+  --temperature 1.0
 
 echo "showcase verification passed for $(git -C "$repo_root" rev-parse HEAD)"

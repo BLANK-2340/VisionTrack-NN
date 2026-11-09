@@ -1,5 +1,36 @@
 # Portfolio continuity
 
+## November 9, 2026 — source-bound policy audit (Asia/Kolkata)
+
+Started from public `main` at
+`79d1060283a68489f180d28e6f40b859f9f1e9af`, with no open pull requests and one
+earlier substantive portfolio commit today. Existing model behavior, recorded
+Fashion-MNIST results and default inference output remain unchanged.
+
+### Completed
+
+- Bound every labeled audit input to its relative path, target and SHA-256, then
+  added canonical hashes for the ordered input manifest and frozen policy.
+- Added a strict offline validator that accepts only bounded, duplicate-free,
+  finite, canonical JSON and regenerates the full report from the exact
+  checkpoint, policy, label mapping and image bytes.
+- Added known-hash coverage and corruption tests for report, input and policy
+  drift, plus source validation in the clean committed-archive workflow.
+
+### Validation and limitations
+
+- The full warning-strict suite, byte-repeatable audit generation and clean
+  committed-archive verification are required before release.
+- SHA-256 establishes deterministic content identity, not authenticated
+  provenance. Selective-risk estimates remain descriptive and can be unstable
+  on small per-class supports.
+
+### Next concrete milestone
+
+Rotate to `cpp-autograd-engine` and add opt-in atomic path-based checkpoint saves
+with round-trip and failed-replacement safety tests while preserving the existing
+stream formats and numeric compatibility.
+
 ## November 4, 2026 — labeled-folder policy audit (Asia/Kolkata)
 
 Started from public `main` at

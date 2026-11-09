@@ -19,8 +19,9 @@ python -m pip install -r requirements-baseline.txt
 The verifier exports committed `HEAD` with `git archive`, then runs the full
 test suite, result-artifact consistency validation, bytecode compilation,
 checkpointed training, PGM inference, and byte-compared environment and
-calibrated-evaluation reports. It therefore detects missing tracked files that
-an in-place working-tree test can overlook.
+calibrated-evaluation reports. It also regenerates and source-validates a
+content-bound labeled-folder policy audit. It therefore detects missing tracked
+files that an in-place working-tree test can overlook.
 
 ## Runnable targets
 
@@ -30,6 +31,7 @@ an in-place working-tree test can overlook.
 | Save and infer | `python -m vision_baseline.demo --checkpoint /tmp/orientation.vtnn` then `python -m vision_baseline.infer /tmp/orientation.vtnn examples/vertical_12x12.pgm` | Deterministic validated checkpoint and P2/P5 input path |
 | Ranked inference | Add `--top-k 3 --temperature 1.0` to the inference command | Stable top-k order, probabilities and top-two confidence margin; [API details](INFERENCE_RANKING.md) |
 | Calibration report | `python -m vision_baseline.evaluate --output /tmp/evaluation.json` | Held-out synthetic corruption, calibration and selective risk |
+| Frozen-policy audit | `python -m vision_baseline.audit_policy model.vtnn labeled-images/ evaluation.json --output audit.json` then `python -m vision_baseline.validate_policy_audit audit.json model.vtnn labeled-images/ evaluation.json` | Per-class coverage/risk bound to checkpoint, policy and input content; [protocol](POLICY_AUDIT.md) |
 | Full checks | `python -W error -m unittest discover -s tests -v` | Model gradients, I/O, data manifests, reports and failure paths |
 | Result validation | `python -W error -m vision_baseline.validate_results results` | Schemas, manifest identity, confusion totals, aggregates and cross-file provenance |
 | Environment fingerprint | `python -W error -m vision_baseline.environment_report --output /tmp/environment.json` | Canonical Python, platform, NumPy, BLAS/LAPACK compiler and SIMD identity without timestamps, hostnames or build paths |
@@ -57,6 +59,7 @@ compute. It is not a pooling-only causal ablation.
 
 - [Baseline architecture, checkpoint format and synthetic evidence](VISION_BASELINE.md)
 - [Calibration protocol and recorded synthetic-corruption metrics](CALIBRATION_EVALUATION.md)
+- [Frozen-policy labeled-folder audit and source validator](POLICY_AUDIT.md)
 - [Fashion-MNIST source verification, licensing and manifest rules](FASHION_MNIST_ADAPTER.md)
 - [Single-seed control](FASHION_MNIST_EXPERIMENT.md) and
   [spatial comparison](FASHION_MNIST_SPATIAL_COMPARISON.md)
@@ -76,6 +79,8 @@ compute. It is not a pooling-only causal ablation.
   other BLAS and math libraries can differ in floating-point rounding.
 - There is no GPU, latency, throughput, production-robustness or competitive
   state-of-the-art claim.
+- Policy-audit SHA-256 values provide deterministic content identity, not
+  authenticated provenance, and small per-class supports can be unstable.
 
 The next robustness milestone is to validate a full official Fashion-MNIST run
 under a separately fixed protocol, if compute permits, while retaining subset

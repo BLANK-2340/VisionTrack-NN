@@ -12,8 +12,14 @@ from .abstention import AbstentionPolicy, policy_from_record, policy_record
 from .checkpoint import loads_model
 from .evaluate_folder import _dataset_files, _labels_for_classes
 from .infer_folder import load_policy
-from .pgm import load_pgm
+from .pgm import loads_pgm
 from .ranking import rank_probabilities
+
+
+def _canonical_sha256(value: object) -> str:
+    encoded = json.dumps(value, allow_nan=False, separators=(",", ":"),
+                         sort_keys=True).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
 
 
 def audit_folder_policy(checkpoint: str | Path, dataset: str | Path,
@@ -22,17 +28,27 @@ def audit_folder_policy(checkpoint: str | Path, dataset: str | Path,
                         temperature: float = 1.0) -> dict[str, object]:
     """Report aggregate and per-class coverage/risk without refitting policy."""
     policy = policy_from_record(policy_record(policy))
+    frozen_policy = policy_record(policy)
     checkpoint_bytes = Path(checkpoint).read_bytes()
     model = loads_model(checkpoint_bytes)
     class_labels = _labels_for_classes(model.bias.size, labels)
     root = Path(dataset)
     samples = _dataset_files(root, class_labels)
     rows = []
+    manifest = []
     class_counts = [dict(samples=0, accepted=0, errors=0) for _ in class_labels]
     total_accepted = 0
     total_errors = 0
     for target, path in samples:
-        pixels = load_pgm(path)
+        relative_path = path.relative_to(root).as_posix()
+        input_bytes = path.read_bytes()
+        input_sha256 = hashlib.sha256(input_bytes).hexdigest()
+        manifest.append({
+            "path": relative_path,
+            "sha256": input_sha256,
+            "target_index": target,
+        })
+        pixels = loads_pgm(input_bytes)
         probabilities = model.predict_proba(pixels[None, :, :], temperature=temperature)
         ranking = rank_probabilities(probabilities)
         predicted = int(ranking.indices[0, 0])
@@ -47,7 +63,8 @@ def audit_folder_policy(checkpoint: str | Path, dataset: str | Path,
         rows.append({
             "accepted": accepted,
             "confidence_margin": margin,
-            "path": path.relative_to(root).as_posix(),
+            "input_sha256": input_sha256,
+            "path": relative_path,
             "predicted_index": predicted,
             "predicted_label": class_labels[predicted],
             "probability": float(ranking.probabilities[0, 0]),
@@ -76,11 +93,13 @@ def audit_folder_policy(checkpoint: str | Path, dataset: str | Path,
         },
         "checkpoint_sha256": hashlib.sha256(checkpoint_bytes).hexdigest(),
         "dataset_layout": "class-directory-pgm",
+        "input_manifest_sha256": _canonical_sha256(manifest),
         "labels": list(class_labels),
         "per_class": per_class,
-        "policy": policy_record(policy),
+        "policy": frozen_policy,
+        "policy_sha256": _canonical_sha256(frozen_policy),
         "predictions": rows,
-        "schema_version": 1,
+        "schema_version": 2,
         "temperature": float(temperature),
     }
 
