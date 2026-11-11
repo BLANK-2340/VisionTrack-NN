@@ -10,6 +10,7 @@ from pathlib import Path
 
 import numpy as np
 
+from .atomic_file import atomic_write_bytes
 from .model import TinyConvNet
 
 MAGIC = b"VTNNCHK\x00"
@@ -132,6 +133,11 @@ def loads_model(data: bytes | bytearray | memoryview) -> TinyConvNet:
 
 def save_model(model: TinyConvNet, path: str | Path) -> None:
     Path(path).write_bytes(dumps_model(model))
+
+
+def save_model_atomic(model: TinyConvNet, path: str | Path) -> None:
+    """Opt in to same-directory atomic publication of canonical checkpoint bytes."""
+    atomic_write_bytes(path, dumps_model(model))
 
 
 def load_model(path: str | Path) -> TinyConvNet:

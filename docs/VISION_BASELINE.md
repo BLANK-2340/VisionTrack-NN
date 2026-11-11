@@ -35,6 +35,14 @@ python -m vision_baseline.demo --checkpoint /tmp/orientation.vtnn
 python -m vision_baseline.infer /tmp/orientation.vtnn examples/vertical_12x12.pgm
 ```
 
+The demo publishes its checkpoint with the opt-in
+`save_model_atomic(model, path)` API. It writes canonical bytes to an
+exclusively created `.tmp` sibling, flushes and file-syncs them, and only then
+uses same-directory `os.replace`. Invalid models and failed replacements leave
+an existing checkpoint unchanged and remove their temporary file; a stale or
+concurrent `.tmp` sibling is rejected rather than overwritten. The original
+`save_model` direct writer remains available for compatibility.
+
 Expected final inference line:
 
 ```text
@@ -72,8 +80,10 @@ train-save-infer demo classified the included vertical sample as class 0.
 Limitations: grayscale inputs, three artificial demo classes, one convolutional
 layer, no augmentation beyond generated placement/noise, no optimizer state in
 checkpoints and no external dataset. SHA-256 detects accidental corruption but is
-not an authenticity signature. This is an educational CPU baseline, not a
-benchmark or paper reproduction.
+not an authenticity signature. Atomic checkpoint publication assumes one
+successful writer per destination and host same-directory replacement semantics;
+it does not lock readers or sync the parent directory after replacement. This is
+an educational CPU baseline, not a benchmark or paper reproduction.
 
 ## Confidence evaluation
 

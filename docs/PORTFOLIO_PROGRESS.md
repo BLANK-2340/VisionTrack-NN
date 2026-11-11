@@ -1,5 +1,36 @@
 # Portfolio continuity
 
+## November 11, 2026 — atomic checkpoint publication (Asia/Kolkata)
+
+Started from public `main` at
+`045a34081eeffadbc1e676f5a4a1eb4df40298c9`, with no authorized commits today
+and no open pull requests. Existing checkpoint bytes, model behavior, recorded
+Fashion-MNIST results and report schemas remain unchanged.
+
+### Completed
+
+- Added an opt-in same-directory atomic byte publisher using exclusive temporary
+  creation, flush, file `fsync` and `os.replace`.
+- Added atomic TinyConvNet checkpoint persistence without changing canonical
+  version-1 bytes or removing the established direct writer.
+- Routed the runnable synthetic demo through atomic publication and covered
+  exact bytes, overwrite, invalid-model failure, injected replacement failure,
+  cleanup and stale/concurrent temporary collision behavior.
+
+### Validation and limitations
+
+- Atomic replacement relies on host filesystem semantics and does not provide
+  reader locking or parent-directory `fsync`; it is not a transactional storage
+  system or authenticity mechanism.
+- This milestone changes persistence safety only. It adds no accuracy, latency,
+  GPU, full-dataset or model-quality claim.
+
+### Next concrete milestone
+
+Reuse the checked atomic byte publisher for canonical JSON policy-audit output,
+with CLI failure-injection coverage that preserves an existing report and no
+changes to audit calculations or schemas.
+
 ## November 9, 2026 — source-bound policy audit (Asia/Kolkata)
 
 Started from public `main` at

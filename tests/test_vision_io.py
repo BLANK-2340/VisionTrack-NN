@@ -7,7 +7,9 @@ from pathlib import Path
 
 import numpy as np
 
-from vision_baseline import TinyConvNet, dumps_model, load_model, loads_model, save_model
+from vision_baseline import (TinyConvNet, dumps_model, load_model, loads_model,
+                             save_model, save_model_atomic)
+from vision_baseline.atomic_file import atomic_write_bytes
 from vision_baseline.infer import predict_file
 from vision_baseline.pgm import loads_pgm
 
@@ -40,6 +42,41 @@ class CheckpointTests(unittest.TestCase):
             with self.subTest(size=len(value)):
                 with self.assertRaises(ValueError):
                     loads_model(value)
+
+    def test_atomic_checkpoint_publish_and_failure_safety(self):
+        first = TinyConvNet(seed=4)
+        replacement = TinyConvNet(seed=9)
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "model.vtnn"
+            temporary = Path(str(path) + ".tmp")
+            save_model_atomic(first, path)
+            self.assertEqual(path.read_bytes(), dumps_model(first))
+            self.assertFalse(temporary.exists())
+
+            save_model_atomic(replacement, path)
+            published = dumps_model(replacement)
+            self.assertEqual(path.read_bytes(), published)
+
+            invalid = TinyConvNet(seed=2)
+            invalid.bias[0] = np.nan
+            with self.assertRaises(ValueError):
+                save_model_atomic(invalid, path)
+            self.assertEqual(path.read_bytes(), published)
+            self.assertFalse(temporary.exists())
+
+            def fail_replace(_source, _destination):
+                raise OSError("injected replacement failure")
+
+            with self.assertRaisesRegex(OSError, "injected replacement failure"):
+                atomic_write_bytes(path, dumps_model(first), _replace=fail_replace)
+            self.assertEqual(path.read_bytes(), published)
+            self.assertFalse(temporary.exists())
+
+            temporary.write_bytes(b"owned by another writer")
+            with self.assertRaises(FileExistsError):
+                save_model_atomic(first, path)
+            self.assertEqual(path.read_bytes(), published)
+            self.assertEqual(temporary.read_bytes(), b"owned by another writer")
 
     def test_metadata_and_nonfinite_values_are_rejected(self):
         model = TinyConvNet(seed=1)

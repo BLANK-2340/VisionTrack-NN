@@ -2,7 +2,7 @@
 
 import argparse
 
-from .checkpoint import save_model
+from .checkpoint import save_model_atomic
 from .model import TinyConvNet, make_dataset
 
 
@@ -20,7 +20,7 @@ def main() -> None:
     print(f"train_accuracy={model.accuracy(train_images, train_labels):.4f}")
     print(f"test_accuracy={model.accuracy(test_images, test_labels):.4f}")
     if arguments.checkpoint:
-        save_model(model, arguments.checkpoint)
+        save_model_atomic(model, arguments.checkpoint)
         print(f"checkpoint={arguments.checkpoint}")
 
 
