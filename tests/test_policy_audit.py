@@ -7,6 +7,7 @@ from pathlib import Path
 
 from vision_baseline import TinyConvNet, save_model
 from vision_baseline.abstention import AbstentionPolicy, policy_record
+from vision_baseline.atomic_file import atomic_write_bytes
 from vision_baseline.audit_policy import audit_folder_policy, main
 from vision_baseline.validate_policy_audit import ValidationError, validate_policy_audit
 
@@ -103,6 +104,44 @@ class PolicyAuditTests(unittest.TestCase):
             self.assertEqual(main([str(checkpoint), str(dataset), str(policy_path),
                                    "--output", str(second)]), 0)
             self.assertEqual(first.read_bytes(), second.read_bytes())
+
+    def test_cli_atomic_publish_preserves_existing_report_on_failure(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            checkpoint, dataset, policy = self.make_fixture(root)
+            policy_path = root / "policy.json"
+            policy_path.write_text(json.dumps(policy_record(policy)), encoding="utf-8")
+            output = root / "audit.json"
+            temporary = Path(str(output) + ".tmp")
+            arguments = [str(checkpoint), str(dataset), str(policy_path),
+                         "--output", str(output)]
+
+            output.write_bytes(b"existing report\n")
+
+            def fail_replace(_source, _destination):
+                raise OSError("injected replacement failure")
+
+            def failing_write(path, data):
+                atomic_write_bytes(path, data, _replace=fail_replace)
+
+            with self.assertRaises(SystemExit):
+                main(arguments, _write=failing_write)
+            self.assertEqual(output.read_bytes(), b"existing report\n")
+            self.assertFalse(temporary.exists())
+
+            temporary.write_bytes(b"owned by another writer")
+            with self.assertRaises(SystemExit):
+                main(arguments)
+            self.assertEqual(output.read_bytes(), b"existing report\n")
+            self.assertEqual(temporary.read_bytes(), b"owned by another writer")
+
+            temporary.unlink()
+            self.assertEqual(main(arguments), 0)
+            expected = audit_folder_policy(checkpoint, dataset, policy)
+            canonical = (json.dumps(expected, allow_nan=False, indent=2,
+                                    sort_keys=True) + "\n").encode("utf-8")
+            self.assertEqual(output.read_bytes(), canonical)
+            self.assertFalse(temporary.exists())
 
     def test_invalid_policy_is_rejected_before_audit(self):
         with tempfile.TemporaryDirectory() as directory:

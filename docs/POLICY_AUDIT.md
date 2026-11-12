@@ -32,6 +32,13 @@ causes validation to fail. SHA-256 here provides deterministic content identity,
 not authenticity against a malicious party; trusted distribution would require
 a separately authenticated signature.
 
+The command publishes the canonical report through an exclusively created
+same-directory `.tmp` sibling, flushes and file-syncs it, then replaces the
+destination. Audit or publication failures leave an existing report unchanged,
+and stale or concurrent temporary siblings are rejected rather than overwritten.
+This relies on host same-directory replacement semantics; it does not lock
+readers or sync the parent directory after replacement.
+
 The threshold and its validation evidence are loaded from the existing policy
 record and are not adjusted using the audit dataset. As a result, the audit is
 valid evidence about one frozen operating point, not a procedure for selecting

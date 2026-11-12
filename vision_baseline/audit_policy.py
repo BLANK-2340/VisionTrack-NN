@@ -6,9 +6,10 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
-from typing import Sequence
+from typing import Callable, Sequence
 
 from .abstention import AbstentionPolicy, policy_from_record, policy_record
+from .atomic_file import atomic_write_bytes
 from .checkpoint import loads_model
 from .evaluate_folder import _dataset_files, _labels_for_classes
 from .infer_folder import load_policy
@@ -104,7 +105,8 @@ def audit_folder_policy(checkpoint: str | Path, dataset: str | Path,
     }
 
 
-def main(argv: list[str] | None = None) -> int:
+def main(argv: list[str] | None = None, *,
+         _write: Callable[[str | Path, bytes], None] = atomic_write_bytes) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("checkpoint", type=Path, help="VTNN checkpoint")
     parser.add_argument("dataset", type=Path, help="root containing one directory per class")
@@ -118,11 +120,12 @@ def main(argv: list[str] | None = None) -> int:
         policy = load_policy(arguments.policy)
         report = audit_folder_policy(arguments.checkpoint, arguments.dataset, policy,
                                      arguments.labels, arguments.temperature)
+        arguments.output.parent.mkdir(parents=True, exist_ok=True)
+        encoded = (json.dumps(report, allow_nan=False, indent=2, sort_keys=True) +
+                   "\n").encode("utf-8")
+        _write(arguments.output, encoded)
     except (OSError, ValueError) as error:
         parser.error(str(error))
-    arguments.output.parent.mkdir(parents=True, exist_ok=True)
-    arguments.output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n",
-                                encoding="utf-8")
     aggregate = report["aggregate"]
     risk = "null" if aggregate["risk"] is None else f"{aggregate['risk']:.6f}"
     print(f"output={arguments.output} samples={aggregate['samples']} "

@@ -1,5 +1,34 @@
 # Portfolio continuity
 
+## November 12, 2026 — atomic policy-audit publication (Asia/Kolkata)
+
+Started from public `main` at
+`c04e9f083c4f4dd2fdc9a13ed85796ab9ee46285`, with no authorized commits today
+and no open pull requests. Existing audit calculations, canonical JSON bytes,
+schema version 2 and recorded model results remain unchanged.
+
+### Completed
+
+- Reused the checked same-directory atomic byte publisher for policy-audit JSON.
+- Kept canonical report serialization byte-identical while rejecting non-finite
+  output before publication.
+- Added CLI-level replacement-failure and stale/concurrent temporary-collision
+  coverage proving that an existing report remains unchanged and foreign
+  temporary content is preserved.
+
+### Validation and limitations
+
+- The warning-strict suite, exact canonical bytes and clean committed-archive
+  showcase must pass before publication.
+- Atomic replacement relies on host filesystem semantics and does not provide
+  reader locking or parent-directory `fsync`. This changes persistence safety
+  only; it adds no model-quality, accuracy, latency or hardware claim.
+
+### Next concrete milestone
+
+Apply the same opt-in atomic publication contract to deterministic folder
+inference JSON, preserving its schema and bytes with overwrite and failure tests.
+
 ## November 11, 2026 — atomic checkpoint publication (Asia/Kolkata)
 
 Started from public `main` at
